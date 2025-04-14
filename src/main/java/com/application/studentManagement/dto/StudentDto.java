@@ -1,34 +1,25 @@
-package com.application.studentManagement.entity;
+package com.application.studentManagement.dto;
 
 import java.util.Date;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
 
-
-@Entity
-public class Student {
-
-    @Id
-    @GeneratedValue
+public class StudentDto {
     private int id;
-
-    @Column(nullable = false)
     private String name;
-
-    @Column(nullable = false, unique=true)
-    @NotBlank(message = "Email is mandatory")
-    @Email(message = "Email should be valid")
     private String email;
-
     private float marksObtained;
-    
-    @JsonFormat(pattern = "yyyy-mm-dd")
     private Date admissionDate;
+    private String grade;
+
+    public StudentDto(){}
+
+    public StudentDto(int id, String name, String email, float marksObtained, java.util.Date admissionDate, String grade) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.marksObtained = marksObtained;
+        this.admissionDate = admissionDate;
+        this.grade = grade;
+    }
 
     public int getId() {
         return id;
@@ -70,10 +61,12 @@ public class Student {
         this.admissionDate = admissionDate;
     }
 
-    @Override
-    public String toString() {
-        return "student [id=" + id + ", name=" + name + ", email=" + email + ", marksObtained=" + marksObtained
-                + ", admissionDate=" + admissionDate + "]";
+    public String getGrade() {
+        return grade;
+    }
+
+    public void setGrade(String grade) {
+        this.grade = grade;
     }
 
 }
