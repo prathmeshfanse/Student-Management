@@ -11,9 +11,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.application.studentManagement.dto.StudentDto;
 import com.application.studentManagement.entity.Student;
-import com.application.studentManagement.repository.studentRepository;
-import com.application.studentManagement.service.studentService;
+import com.application.studentManagement.repository.StudentRepository;
+import com.application.studentManagement.service.StudentService;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PutMapping;
 
@@ -21,42 +22,45 @@ import org.springframework.web.bind.annotation.PutMapping;
 
 @RestController
 @RequestMapping("/students")
-public class studentController {
+public class StudentController {
     
     @Autowired
-    studentService service;
+    StudentService service;
 
     @Autowired
-    studentRepository repository;
+    StudentRepository repository;
 
     @PostMapping
-    public Student addStudent(@RequestBody Student student){
+    public StudentDto addStudent(@RequestBody StudentDto studentDto){
+        StudentDto savedStudent = service.createStudent(studentDto);
+        savedStudent.setGrade(studentDto.getGrade());
 
-        return service.createStudent(student);
+        return savedStudent;
+        
     }
 
     @GetMapping("/allStudents")
-    public List<Student> getAllStudents() {
+    public List<StudentDto> getAllStudents() {
         return service.getAllStudents();
     }
     
 
     @GetMapping("/{id}")
-    public Student getStudentById(@PathVariable int id){
+    public StudentDto getStudentById(@PathVariable int id){
 
         // if(service.getStudentById(id) == null)
         //     return null;
 
-        return service.getStudentById(id);    
+        return service.getStudentById(id);   
         }
 
     @GetMapping(params = "name")
-    public Student getStudentByName(@RequestParam String name){
+    public StudentDto getStudentByName(@RequestParam String name){
         return service.getStudentByName(name);
     }
 
     @GetMapping(params = "email")
-    public Student getStudentByEmail(@RequestParam String email){
+    public StudentDto getStudentByEmail(@RequestParam String email){
         return service.getStudentByEmail(email);
     }
 
@@ -71,7 +75,7 @@ public class studentController {
 
         // return (repository.save(student)!=null);
 
-        Student student2 = service.getStudentById(id);
+        StudentDto student2 = service.getStudentById(id);
 
         if(student != null){
             student2.setAdmissionDate(student.getAdmissionDate());
@@ -92,7 +96,7 @@ public class studentController {
 
         // if(exiStudent == null)
 
-        Student student = service.getStudentById(id);
+        StudentDto student = service.getStudentById(id);
 
         if(student != null){
             repository.deleteById(id);
