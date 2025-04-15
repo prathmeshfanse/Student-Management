@@ -32,6 +32,7 @@ public class StudentController {
 
     @PostMapping
     public StudentDto addStudent(@RequestBody StudentDto studentDto){
+
         StudentDto savedStudent = service.createStudent(studentDto);
         savedStudent.setGrade(studentDto.getGrade());
 
