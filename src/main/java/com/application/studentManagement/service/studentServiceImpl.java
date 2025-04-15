@@ -17,6 +17,23 @@ import com.application.studentManagement.repository.*;
 @Service
 public class StudentServiceImpl implements StudentService{
 
+    private StudentDto getGrade(Student student){
+        
+        StudentDto studentDto = convertToDto(student);
+            LocalDate studentAdmissionDate = LocalDate.of(student.getAdmissionDate().getYear(), student.getAdmissionDate().getMonth()+1, student.getAdmissionDate().getDay()+1);
+            LocalDate sixMonthAgo = LocalDate.now().minusMonths(6);
+
+            if(student.getMarksObtained()>=90 && studentAdmissionDate.isBefore(sixMonthAgo)){
+                studentDto.setGrade("Platinum");
+            }else if(student.getMarksObtained()>=80 && student.getMarksObtained()<90){
+                studentDto.setGrade("Merit");
+            }else if(student.getMarksObtained()>40){
+                studentDto.setGrade("Pass");
+            }else{
+                studentDto.setGrade("Fail");
+            }
+            return studentDto;   
+    }
     @Autowired
     StudentRepository repository;
 
@@ -131,7 +148,7 @@ public class StudentServiceImpl implements StudentService{
     public StudentDto getStudentByName(String name) {
         Student student = repository.getStudentByName(name);
 
-        return convertToDto(student);
+        return getGrade(student);
     }
     /*
     @Override
@@ -143,7 +160,7 @@ public class StudentServiceImpl implements StudentService{
     public StudentDto getStudentByEmail(String mail) {
         Student student = repository.getStudentByEmail(mail);
 
-        return convertToDto(student);
+        return getGrade(student);   
     }
 
 /*
