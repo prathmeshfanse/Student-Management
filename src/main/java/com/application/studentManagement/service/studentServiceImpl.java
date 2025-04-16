@@ -163,6 +163,20 @@ public class StudentServiceImpl implements StudentService{
         return getGrade(student);   
     }
 
+    @Override
+    public boolean deleteById(int id){
+         repository.deleteById(id);
+         return true;
+
+    }
+
+    @Override
+    public boolean save(Student student) {
+        repository.save(student);
+        return true;
+
+    }
+
 /*
     @Override
     public StudentDto getStudentByEmail(String mail) {

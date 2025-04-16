@@ -19,16 +19,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PutMapping;
 
 
-
 @RestController
 @RequestMapping("/students")
 public class StudentController {
     
     @Autowired
-    StudentService service;
+    private StudentService service;
 
     @Autowired
-    StudentRepository repository;
+    private StudentRepository repository;
 
     @PostMapping
     public StudentDto addStudent(@RequestBody StudentDto studentDto){
@@ -78,13 +77,13 @@ public class StudentController {
 
         StudentDto student2 = service.getStudentById(id);
 
-        if(student != null){
+        if(student2 != null){
             student2.setAdmissionDate(student.getAdmissionDate());
             student2.setEmail(student.getEmail());
             student2.setMarksObtained(student.getMarksObtained());
             student2.setName(student.getName());
-            repository.save(student);
-            return true;
+            service.save(student);
+            return service.save(student);
         }else{
             return false;
         }
@@ -100,8 +99,7 @@ public class StudentController {
         StudentDto student = service.getStudentById(id);
 
         if(student != null){
-            repository.deleteById(id);
-            return true;
+            return service.deleteById(id);
         }else{
             return false;
         }
