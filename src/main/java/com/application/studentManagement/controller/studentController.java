@@ -28,7 +28,7 @@ public class StudentController {
     // @Autowired
     // private StudentRepository repository;
 
-    @PostMapping
+    @PostMapping("/addStudent")
     public StudentDto addStudent(@RequestBody StudentDto studentDto) throws Exception{
 
         StudentDto savedStudent = service.createStudent(studentDto);
