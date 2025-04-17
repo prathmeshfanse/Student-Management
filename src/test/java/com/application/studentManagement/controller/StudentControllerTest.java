@@ -54,7 +54,7 @@ public class StudentControllerTest {
     }
 
     @Test
-    public void testAddStudent() {
+    public void testAddStudent() throws Exception {
         when(service.createStudent(student1)).thenReturn(student1);
 
         StudentDto result = studentController.addStudent(student1);

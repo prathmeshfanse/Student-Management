@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.application.studentManagement.dto.StudentDto;
 import com.application.studentManagement.entity.Student;
-import com.application.studentManagement.repository.StudentRepository;
 import com.application.studentManagement.service.StudentService;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -26,11 +25,11 @@ public class StudentController {
     @Autowired
     private StudentService service;
 
-    @Autowired
-    private StudentRepository repository;
+    // @Autowired
+    // private StudentRepository repository;
 
     @PostMapping
-    public StudentDto addStudent(@RequestBody StudentDto studentDto){
+    public StudentDto addStudent(@RequestBody StudentDto studentDto) throws Exception{
 
         StudentDto savedStudent = service.createStudent(studentDto);
         savedStudent.setGrade(studentDto.getGrade());

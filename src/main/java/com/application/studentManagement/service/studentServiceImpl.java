@@ -17,6 +17,9 @@ import com.application.studentManagement.repository.*;
 @Service
 public class StudentServiceImpl implements StudentService{
 
+    @Autowired
+    StudentRepository repository;
+    
     private StudentDto getGrade(Student student){
         
         StudentDto studentDto = convertToDto(student);
@@ -34,8 +37,7 @@ public class StudentServiceImpl implements StudentService{
             }
             return studentDto;   
     }
-    @Autowired
-    StudentRepository repository;
+
 
     //Entity->dto
     private StudentDto convertToDto(Student student){
@@ -58,10 +60,10 @@ public class StudentServiceImpl implements StudentService{
     public StudentDto createStudent(StudentDto StudentDto) {
         Student student = convertToEntity(StudentDto);
 
-        if(StudentDto == null || StudentDto.getName()==(null) )
+        if(StudentDto == null || StudentDto.getName()==(null) || StudentDto.getName().equals("") )
             throw new IllegalArgumentException("Missing required field: name");
         
-        if(StudentDto==null || StudentDto.getEmail()==null)
+        if(StudentDto==null || StudentDto.getEmail()==null || StudentDto.getEmail().equals("") )
             throw new IllegalArgumentException("Missing required field: email");
 
         if(repository.existsByEmail( StudentDto.getEmail()))
@@ -69,6 +71,8 @@ public class StudentServiceImpl implements StudentService{
 
         if(!StudentDto.getEmail().matches(("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$")))
             throw new InvalidEmailException("Invalid email format");
+
+        
 
         return convertToDto(repository.save(student));
     }
@@ -118,30 +122,11 @@ public class StudentServiceImpl implements StudentService{
         Student student =  repository.findById(id)
                             .orElseThrow(() -> new StudentNotFoundException("Student not found with id: " + id));
 
-        // StudentDto studentDto = convertToDto(student);
-        // LocalDate studentAdmissionDate = LocalDate.of(student.getAdmissionDate().getYear(), student.getAdmissionDate().getMonth()+1, student.getAdmissionDate().getDay()+1);
-        // LocalDate sixMonthAgo = LocalDate.now().minusMonths(6);
-        //     if(student.getMarksObtained()>=90 && studentAdmissionDate.isBefore(sixMonthAgo)){
-        //         studentDto.setGrade("Platinum");
-        //     }else if(student.getMarksObtained()>=80 && student.getMarksObtained()<90){
-        //         studentDto.setGrade("Merit");
-        //     }else if(student.getMarksObtained()>40){
-        //         studentDto.setGrade("Pass");
-        //     }else{
-        //         studentDto.setGrade("Fail");
-        //     }
-        
-        // student = convertToEntity(studentDto);
-        return convertToDto(student);
+        return getGrade(student);
    
     }
 
-/*
-    @Override
-    public StudentDto getStudentById(int id) {
-        return repository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Student not found with id: " + id));
-    }*/
+
 
     
     @Override
