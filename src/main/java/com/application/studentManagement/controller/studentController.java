@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.application.studentManagement.dto.StudentDto;
-import com.application.studentManagement.entity.Student;
 import com.application.studentManagement.service.StudentService;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -64,7 +63,7 @@ public class StudentController {
     }
 
     @PutMapping("/update/{id}")
-    public boolean updateStudentById(@PathVariable int id, @RequestBody Student student) {
+    public boolean updateStudentById(@PathVariable int id, @RequestBody StudentDto student) {
         // Student exist = repository.findById(id)
         //         .orElseThrow(() -> new RuntimeException());
         // exist.setEmail(student.getEmail());
@@ -74,18 +73,20 @@ public class StudentController {
 
         // return (repository.save(student)!=null);
 
-        StudentDto student2 = service.getStudentById(id);
+        // StudentDto student2 = service.getStudentById(id);
 
-        if(student2 != null){
-            student2.setAdmissionDate(student.getAdmissionDate());
-            student2.setEmail(student.getEmail());
-            student2.setMarksObtained(student.getMarksObtained());
-            student2.setName(student.getName());
-            service.save(student);
-            return service.save(student);
-        }else{
-            return false;
-        }
+        // if(student2 != null){
+        //     student2.setAdmissionDate(student.getAdmissionDate());
+        //     student2.setEmail(student.getEmail());
+        //     student2.setMarksObtained(student.getMarksObtained());
+        //     student2.setName(student.getName());
+        //     service.updateStudentById(id, student2);
+        //      return true;
+        // }else{
+        //     return false;
+        // }
+
+        return service.updateStudentById(id, student);
     }
 
     @DeleteMapping("/delete/{id}")

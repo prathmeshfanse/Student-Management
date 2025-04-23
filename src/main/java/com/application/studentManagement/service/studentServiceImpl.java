@@ -156,10 +156,18 @@ public class StudentServiceImpl implements StudentService{
     }
 
     @Override
-    public boolean save(Student student) {
-        repository.save(student);
-        return true;
+    public boolean updateStudentById(int id, StudentDto studentDto) {
+        Student existingStudent = repository.findById(id)
+        .orElseThrow(() -> new StudentNotFoundException("Student not found with id: " + id));
 
+    // Update the fields
+    existingStudent.setName(studentDto.getName());
+    existingStudent.setEmail(studentDto.getEmail());
+    existingStudent.setMarksObtained(studentDto.getMarksObtained());
+    existingStudent.setAdmissionDate(studentDto.getAdmissionDate());
+
+    return repository.save(existingStudent) != null;
+    
     }
 
 /*

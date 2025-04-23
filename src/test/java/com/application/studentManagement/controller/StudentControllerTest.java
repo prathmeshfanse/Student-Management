@@ -1,10 +1,14 @@
 package com.application.studentManagement.controller;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
+import java.time.LocalDate;
 import java.util.Arrays;
-import java.util.Date;
+import java.sql.Date;
+
+
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -14,12 +18,14 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
 import org.mockito.junit.jupiter.MockitoExtension;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.application.studentManagement.dto.StudentDto;
 import com.application.studentManagement.entity.Student;
 import com.application.studentManagement.repository.StudentRepository;
 import com.application.studentManagement.service.StudentService;
+import com.application.studentManagement.service.StudentServiceImplTest;
 
 @ExtendWith(MockitoExtension.class)
 public class StudentControllerTest {
@@ -32,6 +38,8 @@ public class StudentControllerTest {
 
     @InjectMocks
     private StudentController studentController;
+    
+    private static final Logger logger = LoggerFactory.getLogger(StudentServiceImplTest.class);
 
     private StudentDto student1;
     private StudentDto student2;
@@ -63,6 +71,8 @@ public class StudentControllerTest {
         assertEquals(68.0f, result.getMarksObtained());
         assertEquals("John@gmail.com", result.getEmail());
         assertEquals("Pass", result.getGrade());
+
+        logger.info("Test case testAddStudent passed");
     }
 
     @Test
@@ -75,6 +85,9 @@ public class StudentControllerTest {
         assertEquals(2, actual.size());
         assertEquals("John", actual.get(0).getName());
         assertEquals("Rohn", actual.get(1).getName());
+
+        
+        logger.info("Test case testGetAllStudents passed");
     }
 
     @Test
@@ -89,24 +102,36 @@ public class StudentControllerTest {
         assertEquals(68.0f, actual.getMarksObtained());
         assertEquals("John@gmail.com", actual.getEmail());
         assertEquals("Pass", actual.getGrade());
+
+        logger.info("Test case testGetStudentById passed");
     }
 
     @Test
     public void testupdateStudentById(){
         int id = 1;
 
-        Student updatedStudent = new Student();
+        // Student student1 = new Student();
+        // student1.setId(1);
+        // student1.setName("John");
+        // student1.setMarksObtained(68.0f);
+        // student1.setEmail("John@gmail.com");
+
+        StudentDto updatedStudent = new StudentDto();
         updatedStudent.setName("Updated Name");
         updatedStudent.setEmail("updated@example.com");
         updatedStudent.setMarksObtained(90.0f);
-        updatedStudent.setAdmissionDate(new Date());
+        updatedStudent.setAdmissionDate(Date.valueOf(LocalDate.now().minusMonths(7)));
+        updatedStudent.setGrade("Merit");
             
-        when(service.getStudentById(id)).thenReturn(student1);
-        when(repository.save(updatedStudent)).thenReturn(updatedStudent);
+       // when(service.getStudentById(1)).thenReturn(student1);
+        when(service.updateStudentById(1, updatedStudent)).thenReturn(true);
 
-        boolean result = studentController.updateStudentById(id, updatedStudent);
+        boolean result = studentController.updateStudentById(1, updatedStudent);
 
         assertEquals(true, result);
+
+        
+        logger.info("Test case testupdateStudentById passed");
     }
 
     @Test
@@ -119,6 +144,7 @@ public class StudentControllerTest {
 
         assertEquals(true, result);
 
+        logger.info("Test case testdeleteStudentById_success passed");
     }
 
     @Test
@@ -129,6 +155,8 @@ public class StudentControllerTest {
         boolean result = studentController.deleteStudentById(100);
 
         assertEquals(false, result);
+
+        logger.info("Test case testDeleteStudentById_notFound passed");
 
     }
 
